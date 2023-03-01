@@ -1,0 +1,67 @@
+steps:
+  - name: "node:16.17.0"
+    entrypoint: "npm"
+    args: ["install"]
+    dir: "frontend"
+  - name: "node:16.17.0"
+    entrypoint: "npm"
+    args: ["install"]
+    dir: "backend"
+  - name: "node:16.17.0"
+    entrypoint: "npm"
+    args: ["run", "create-env"]
+    env:
+      - "PORT=${_PORT}"
+      - "SWAGGER_USER=${_SWAGGER_USER}"
+      - "SWAGGER_PASSWORD=${_SWAGGER_PASSWORD}"
+      - "DEV_DB_USERNAME=${_DEV_DB_USERNAME}"
+      - "DEV_DB_PASSWORD=${_DEV_DB_PASSWORD}"
+      - "DEV_DB_DATABASE=${_DEV_DB_DATABASE}"
+      - "DEV_DB_HOST=${_DEV_DB_HOST}"
+      - "DEV_DB_PORT=${_DEV_DB_PORT}"
+      - "DEV_DB_SCHEMA=${_DEV_DB_SCHEMA}"
+      - "DEV_DB_SECRET_KEY=${_DEV_DB_SECRET_KEY}"
+      - "DECRYPT_QUERY=${_DECRYPT_QUERY}"
+      - "ENCRYPT_QUERY=${_ENCRYPT_QUERY}"
+      - "SECRET_KEY=${_SECRET_KEY}"
+      - "SECRET_KEY_ACCESS=${_SECRET_KEY_ACCESS}"
+      - "CORS_ORIGIN_LIST=${_CORS_ORIGIN_LIST}"
+      - "CSPOPTIONS1=${_CSPOPTIONS1}"
+      - "CSPOPTIONS2=${_CSPOPTIONS2}"
+      - "EMAIL_ID=${_EMAIL_ID}"
+      - "EMAIL_PASSWORD=${_EMAIL_PASSWORD}"
+      - "DEV_IP=${_DEV_IP}"
+      - "PRODUCT_IP=${_PRODUCT_IP}"
+      - "PROD_DB_HOST=${_PROD_DB_HOST}"
+    dir: "backend"
+  - name: "node:16.17.0"
+    entrypoint: "npm"
+    args: ["run", "cat-env"]
+    dir: "backend"
+  - name: "node:16.17.0"
+    entrypoint: "npm"
+    args: ["run", "build"]
+    dir: "backend"
+  - name: "node:16.17.0"
+    entrypoint: "npm"
+    args: ["run", "build"]
+    env:
+      - "VUE_APP_DEVHOST=${_VUE_APP_DEVHOST}"
+    dir: "frontend"
+  - name: "node:16.17.0"
+    entrypoint: "npm"
+    args: ["run", "pwd"]
+    dir: "backend"
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: "bash"
+    args:
+      [
+        "-c",
+        "gcloud config set app/cloud_build_timeout 3000 && gcloud app deploy",
+      ]
+    dir: "backend"
+
+timeout: "3000s"
+
+options:
+  logging: CLOUD_LOGGING_ONLY
