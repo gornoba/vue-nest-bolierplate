@@ -5,10 +5,18 @@ import { LocalStrategy } from './auth/local/local.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './auth/jwt/jwt.strategy';
 import { HttpModule } from '@nestjs/axios';
+import { BullModule } from '@nestjs/bull';
+import { templateQueue } from './queues/template.queues';
 
 @Module({
-  imports: [JwtModule.register({}), HttpModule],
-  providers: [TemplateService, LocalStrategy, JwtStrategy],
+  imports: [
+    JwtModule.register({}),
+    HttpModule,
+    BullModule.registerQueue({
+      name: 'template',
+    }),
+  ],
+  providers: [TemplateService, LocalStrategy, JwtStrategy, templateQueue],
   controllers: [TemplateController],
 })
 export class TemplateModule {}

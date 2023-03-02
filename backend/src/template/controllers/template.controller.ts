@@ -26,7 +26,8 @@ import { interval, lastValueFrom, map, Observable } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
 import { AxiosResponse } from 'axios';
 import { AxiosRequestConfig } from '../../../node_modules/axios/index.d';
-import { templateQueue } from '../queues/template.queues';
+import { InjectQueue } from '@nestjs/bull';
+import { Queue } from 'bull';
 
 @ApiTags('template')
 @Roles(Role.Admin)
@@ -112,7 +113,9 @@ export class TemplateController {
   }
 
   @Post('bulltest')
-  async bulltest(@Body() body) {
-    return await this.templateQueue.add('test', body);
+  async bulltest(@Body() body): Promise<Object> {
+    const result = await this.templateQueue.add('test', { data: '123' });
+    const resultFinish = await result.finished();
+    return resultFinish;
   }
 }

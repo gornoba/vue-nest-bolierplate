@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
@@ -28,6 +28,7 @@ export class TemplateService {
       role: 'user',
     },
   ];
+  private logger = new Logger(TemplateService.name);
 
   constructor(
     private readonly jwtService: JwtService,
@@ -90,6 +91,7 @@ export class TemplateService {
   }
 
   async bullTestData(data) {
+    data.queue = true;
     return data;
   }
 }

@@ -84,8 +84,8 @@ function swagger(app: NestExpressApplication, configService: ConfigService) {
 }
 
 function nestMiddleware(app: NestExpressApplication) {
-  app.useGlobalFilters(new AllExceptionFilter(app.get(RecordRepository))); // exception filter
-  app.useGlobalInterceptors(new RecordInterceptor(app.get(RecordRepository)));
+  // app.useGlobalFilters(new AllExceptionFilter(app.get(RecordRepository))); // exception filter
+  // app.useGlobalInterceptors(new RecordInterceptor(app.get(RecordRepository)));
   app.useGlobalInterceptors(new SuccessInterceptor()); // success interceptor
 }
 
